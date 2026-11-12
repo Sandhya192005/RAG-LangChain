@@ -13,6 +13,34 @@ answer is grounded in your data instead of the model's guesswork.
                                               LangChain prompt(context + question) -> LLM -> answer
 ```
 
+## Tech stack
+
+| Part | Tools |
+|---|---|
+| Language | Python |
+| LLM orchestration | LangChain (`langchain-core`, `langchain-openai`) |
+| Models | OpenAI chat model (`CHAT_MODEL`) + `text-embedding-3-small` embeddings (1536 dims) |
+| PDF loading | pypdf |
+| Vector store | NumPy files, or PostgreSQL 17 + **pgvector** (cosine distance) in Docker |
+| Config | python-dotenv (`.env`) |
+
+## Project structure
+
+```
+ask.py             # chat loop: retrieve -> generate (or --no-rag to compare)
+ingest.py          # build the index: load -> chunk -> embed -> store
+rag/
+├── load.py        # read the PDF into clean text
+├── chunk.py       # split text into overlapping chunks
+├── embed.py       # turn chunks into vectors (OpenAI embeddings)
+├── store.py       # save/load the NumPy index (index/)
+├── pg_store.py    # save/search vectors in PostgreSQL + pgvector
+├── retrieve.py    # find the top-k most similar chunks for a question
+└── generate.py    # LangChain prompt + chat model -> grounded answer
+data/              # put your resume PDF here (not committed)
+docker-compose.yml # PostgreSQL + pgvector
+```
+
 ## Setup (Windows PowerShell)
 ```powershell
 python -m venv .venv
