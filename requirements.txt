@@ -1,0 +1,11 @@
+pypdf>=4.0
+openai>=1.40
+numpy>=1.26
+python-dotenv>=1.0
+langchain-core>=0.3
+langchain-openai>=0.2
+# Pure-Python PostgreSQL driver (psycopg's binary DLL was blocked by Smart App Control)
+pg8000>=1.31
+# Pinned: newer xxhash (a LangChain/langsmith dependency) was blocked by
+# Windows Smart App Control on this machine; 3.5.0 loads fine.
+xxhash==3.5.0

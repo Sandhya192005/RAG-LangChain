@@ -1,0 +1,24 @@
+﻿# PostgreSQL 17 with the pgvector extension pre-installed.
+# Runs on port 5433 so it doesn't clash with a normal PostgreSQL on 5432.
+# Docker Compose reads PG_DB / PG_USER / PG_PASSWORD from the .env file next to this file.
+#
+#   docker compose up -d     # start (in the background)
+#   docker compose ps        # is it running?
+#   docker compose stop      # stop (data is kept)
+#   docker compose down -v   # delete container AND data
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    container_name: rag-pgvector
+    environment:
+      POSTGRES_DB: ${PG_DB}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+    ports:
+      - "127.0.0.1:5433:5432"   # only reachable from this PC; host port 5433 -> container 5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data   # keeps data when the container restarts
+    restart: unless-stopped
+
+volumes:
+  pgdata:
